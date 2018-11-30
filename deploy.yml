@@ -1,7 +1,7 @@
 - hosts: localhost
   tasks:
    - name: remove old file from webapps
-     file: path=/var/lib/tomcat/webapps/sample.war state=absent
+     file: path=/var/lib/tomcat8/webapps/sample.war state=absent
      become: true
 
    - name: remove old file from staging
@@ -17,12 +17,12 @@
      become: true
 
    - name: copy to tomcat location
-     copy: src=/tmp/sample.war dest=/var/lib/tomcat/webapps/sample.war
+     copy: src=/tmp/sample.war dest=/var/lib/tomcat8/webapps/sample.war
      become: true
      notify: tomcat restart
 
 
   handlers:
    - name: tomcat restart
-     service: name=tomcat state=restarted
+     service: name=tomcat8 state=restarted
      become: true
