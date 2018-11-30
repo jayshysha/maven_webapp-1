@@ -1,0 +1,28 @@
+- hosts: localhost
+  tasks:
+   - name: remove old file from webapps
+     file: path=/var/lib/tomcat/webapps/sample.war state=absent
+     become: true
+
+   - name: remove old file from staging
+     file: path=/tmp/sample.war state=absent
+     become: true
+
+   - name: download was from cloud
+     get_url: url=https://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war dest=/tmp/
+     become: true
+
+   - name: change mode on sample war
+     file: path=/tmp/sample.war mode=0777
+     become: true
+
+   - name: copy to tomcat location
+     copy: src=/tmp/sample.war dest=/var/lib/tomcat/webapps/sample.war
+     become: true
+     notify: tomcat restart
+
+
+  handlers:
+   - name: tomcat restart
+     service: name=tomcat state=restarted
+     become: true
